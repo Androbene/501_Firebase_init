@@ -27,7 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         // Create a Remote Config Setting to enable developer mode
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 2 // increase the number of fetches available per hour during development
+            // increase the number of fetches available per hour during development
+            minimumFetchIntervalInSeconds = 2
         }
         remoteConfig.setConfigSettingsAsync(configSettings)  // use Remote Config Setting to set the minimum fetch interval.
 
@@ -35,9 +36,24 @@ class MainActivity : AppCompatActivity() {
 
         fetchWelcome()
 
-        binding.btn.setOnClickListener {
-            fetchWelcome()
-        }
+        binding.btnFetch.setOnClickListener { fetchWelcome() }
+        binding.btnReset.setOnClickListener { resetRC() }
+    }
+
+    private fun resetRC() {
+        remoteConfig.reset()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val configSettings = remoteConfigSettings {
+                        minimumFetchIntervalInSeconds = 3
+                    }
+                    remoteConfig.setConfigSettingsAsync(configSettings)
+                    remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
+                        .addOnCompleteListener { displayWelcomeMessage() }
+                } else {
+                    Log.d(TAG, "reset failed")
+                }
+            }
     }
 
     private fun fetchWelcome() {
@@ -60,8 +76,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayWelcomeMessage() {
-        val welcomeMessage = remoteConfig[WELCOME_MESSAGE_KEY].asString() // 1й вариант написания через []
-        val textColor = remoteConfig.getString(WELCOME_TEXT_COLOR_KEY).let { Color.parseColor(it) } // 2й вариант написания
+        val welcomeMessage = remoteConfig[WELCOME_MESSAGE_KEY].asString() // 1й вариант написания
+        val textColor = remoteConfig.getString(WELCOME_TEXT_COLOR_KEY)
+            .let { Color.parseColor(it) } // 2й вариант написания
         binding.tvHello.isAllCaps = remoteConfig[WELCOME_MESSAGE_CAPS_KEY].asBoolean()
         binding.tvHello.text = welcomeMessage
         binding.tvHello.setTextColor(textColor)
@@ -69,6 +86,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
+
         // Remote Config keys
         private const val LOADING_PHRASE_CONFIG_KEY = "loading_phrase"
         private const val WELCOME_MESSAGE_KEY = "welcome_message"
