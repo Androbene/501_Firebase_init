@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "501_Firebase_init"

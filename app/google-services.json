@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "140926426743",
+    "project_id": "first-init-501",
+    "storage_bucket": "first-init-501.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140926426743:android:4bc43bfc2e137000c1b072",
+        "android_client_info": {
+          "package_name": "ua.androbene.a501_firebase_init"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140926426743-1atho1dr240u1r2k0msif12n30jjitqs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4t-tq8KH_WFwMDrIUeP08z9_kL9efyFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "140926426743-1atho1dr240u1r2k0msif12n30jjitqs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
