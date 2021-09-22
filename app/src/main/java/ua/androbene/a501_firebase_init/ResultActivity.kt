@@ -1,6 +1,5 @@
 package ua.androbene.a501_firebase_init
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +7,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import ua.androbene.a501_firebase_init.databinding.ActivityResultBinding
@@ -21,7 +19,7 @@ class ResultActivity : AppCompatActivity() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    private var optTimes = 0
+    private var userWasResultScreenTimesPS = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +28,8 @@ class ResultActivity : AppCompatActivity() {
 
         bind.apply {
             btnOptimize.setOnClickListener {
-                if (optTimes < 10) optTimes++
-                tvResultTimes.text = optTimes.toString()
+                if (userWasResultScreenTimesPS < 10) userWasResultScreenTimesPS++
+                tvResultTimes.text = userWasResultScreenTimesPS.toString()
                 coroutineScope.launch {
                     for (i in 1..10) {
                         tvResultTimes.setTextColor(Random.nextInt(Int.MIN_VALUE, Int.MAX_VALUE))
@@ -48,18 +46,21 @@ class ResultActivity : AppCompatActivity() {
 
         // ЛОГИ ЧЕРЕЗ АНАЛИТИКУ
         firebaseAnalytics = Firebase.analytics
-        firebaseAnalytics.logEvent("USER_WAS_ON_RESULT_SCREEN_${optTimes}_TIMES") {}
+        firebaseAnalytics.logEvent("USER_WAS_ON_RESULT_SCREEN") {
+            param(FirebaseAnalytics.Param.ITEM_NAME, "TIMES_PER_SESSION")
+            param(FirebaseAnalytics.Param.VALUE, userWasResultScreenTimesPS)
+        }
 
         // ЛОГИ ЧЕРЕЗ КРАШЛИТИКУ
-        crashlytics = Firebase.crashlytics
-        try {
-            //работает, НО без веских причин на второй день прила НАЧАЛА крашиться
-            //и длилось это до переустановки из студии
-            throw ResultException("USER_WAS_ON_RESULT_SCREEN_${optTimes}_TIMES")
-        } catch (e: Exception) {
-            crashlytics.recordException(e)
-        }
-        Log.d("lol", "onDestroy -> $optTimes")
+//        crashlytics = Firebase.crashlytics
+//        try {
+//            //работает, НО без веских причин на второй день прила НАЧАЛА крашиться
+//            //и длилось это до переустановки из студии
+//            throw ResultException("USER_WAS_ON_RESULT_SCREEN_${USER_WAS_ON_RESULT_SCREEN}_TIMES")
+//        } catch (e: Exception) {
+//            crashlytics.recordException(e)
+//        }
+        Log.d("lol", "onDestroy -> $userWasResultScreenTimesPS")
     }
 
     class ResultException(mess: String): Exception(mess)
