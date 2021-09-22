@@ -13,7 +13,7 @@ import ua.androbene.a501_firebase_init.databinding.ActivityResultBinding
 import kotlin.random.Random
 
 class ResultActivity : AppCompatActivity() {
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    //    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var crashlytics: FirebaseCrashlytics
     private lateinit var bind: ActivityResultBinding
 
@@ -29,6 +29,9 @@ class ResultActivity : AppCompatActivity() {
         bind.apply {
             btnOptimize.setOnClickListener {
                 if (userWasResultScreenTimesPS < 10) userWasResultScreenTimesPS++
+
+                Accessory.logEventToFireBase("BTN_${userWasResultScreenTimesPS}")
+
                 tvResultTimes.text = userWasResultScreenTimesPS.toString()
                 coroutineScope.launch {
                     for (i in 1..10) {
@@ -45,11 +48,16 @@ class ResultActivity : AppCompatActivity() {
         coroutineScope.cancel()
 
         // ЛОГИ ЧЕРЕЗ АНАЛИТИКУ
-        firebaseAnalytics = Firebase.analytics
-        firebaseAnalytics.logEvent("USER_WAS_ON_RESULT_SCREEN") {
-            param(FirebaseAnalytics.Param.ITEM_NAME, "TIMES_PER_SESSION")
-            param(FirebaseAnalytics.Param.VALUE, userWasResultScreenTimesPS)
-        }
+//        val firebaseAnalytics = Firebase.analytics
+//        firebaseAnalytics.logEvent("USER_WAS_ON_RESULT_SCREEN") {
+//            param(FirebaseAnalytics.Param.ITEM_NAME, "TIMES_PER_SESSION")
+//            param(FirebaseAnalytics.Param.VALUE, userWasResultScreenTimesPS)
+//        }
+        Accessory.logEventToFireBase(
+            "USER_WAS_ON_RESULT_SCREEN",
+            "TIMES_PER_SESSION",
+            userWasResultScreenTimesPS
+        )
 
         // ЛОГИ ЧЕРЕЗ КРАШЛИТИКУ
 //        crashlytics = Firebase.crashlytics
@@ -63,5 +71,5 @@ class ResultActivity : AppCompatActivity() {
         Log.d("lol", "onDestroy -> $userWasResultScreenTimesPS")
     }
 
-    class ResultException(mess: String): Exception(mess)
+    class ResultException(mess: String) : Exception(mess)
 }

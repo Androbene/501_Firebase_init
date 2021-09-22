@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Accessory.logEventToFireBase("OnCreateMAIN")
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -83,14 +86,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetRC() {
+        Accessory.logEventToFireBase("resetRC")
 
         startActivity(Intent(this, ResultActivity::class.java))
 
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-            param(FirebaseAnalytics.Param.ITEM_ID, 1945)
-            param(FirebaseAnalytics.Param.ITEM_NAME, "ResScreen-1946")
-            param(FirebaseAnalytics.Param.CONTENT_TYPE, "ResScreen-stats")
-        }
+//        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+//            param(FirebaseAnalytics.Param.ITEM_ID, 1945)
+//            param(FirebaseAnalytics.Param.ITEM_NAME, "ResScreen-1946")
+//            param(FirebaseAnalytics.Param.CONTENT_TYPE, "ResScreen-stats")
+//        }
 
 //        throw Exception("MY_EXEPTION_resetRC")
         remoteConfig.reset()
