@@ -1,6 +1,5 @@
 package ua.androbene.a501_firebase_init
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.crashlytics.ktx.setCustomKeys
@@ -69,9 +67,13 @@ class MainActivity : AppCompatActivity() {
 
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
 
-        fetchWelcome()
+//        fetchRemoteData()
+        displayRCData()
 
-        binding.btnFetch.setOnClickListener { fetchWelcome() }
+
+        binding.btnFetch.setOnClickListener {
+            fetchRemoteData()
+        }
         binding.btnReset.setOnClickListener {
             crashlytics.log("btnReset(crash) button clicked.")
             resetRC()
@@ -86,16 +88,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetRC() {
-        Accessory.logEventToFireBase("resetRC")
-
-        startActivity(Intent(this, ResultActivity::class.java))
-
-//        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-//            param(FirebaseAnalytics.Param.ITEM_ID, 1945)
-//            param(FirebaseAnalytics.Param.ITEM_NAME, "ResScreen-1946")
-//            param(FirebaseAnalytics.Param.CONTENT_TYPE, "ResScreen-stats")
-//        }
-
+//        startActivity(Intent(this, ResultActivity::class.java))
 //        throw Exception("MY_EXEPTION_resetRC")
         remoteConfig.reset()
             .addOnCompleteListener(this) { task ->
@@ -105,15 +98,15 @@ class MainActivity : AppCompatActivity() {
                     }
                     remoteConfig.setConfigSettingsAsync(configSettings)
                     remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
-                        .addOnCompleteListener { displayWelcomeMessage() }
+                        .addOnCompleteListener { displayRCData() }
                 } else {
                     Log.d(TAG, "reset failed")
                 }
             }
     }
 
-    private fun fetchWelcome() {
-        binding.tvHello.text = remoteConfig[LOADING_PHRASE_CONFIG_KEY].asString()
+    private fun fetchRemoteData() {
+//        binding.tvMainText.text = remoteConfig[MAIN_TEXT_RC_KEY].asString()
         remoteConfig.fetchAndActivate()
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -127,13 +120,13 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "Fetch failed: ${task.exception?.message}")
                     Toast.makeText(this, "Fetch failed", Toast.LENGTH_SHORT).show()
                 }
-                displayWelcomeMessage()
+                displayRCData()
             }
     }
 
-    private fun displayWelcomeMessage() {
-        val welcomeMessage = remoteConfig[WELCOME_MESSAGE_KEY].asString() // 1й вариант написания
-        val textColor = remoteConfig.getString(WELCOME_TEXT_COLOR_KEY) // 2й вариант написания
+    private fun displayRCData() {
+        val mainText = remoteConfig[MAIN_TEXT_RC_KEY].asString() // 1й вариант написания
+        val textColor = remoteConfig.getString(MAIN_TEXT_COLOR_RC_KEY) // 2й вариант написания
             .let {
                 try {
                     Color.parseColor(it)
@@ -142,18 +135,17 @@ class MainActivity : AppCompatActivity() {
                     Color.YELLOW
                 }
             } // 2й вариант написания
-        binding.tvHello.isAllCaps = remoteConfig[WELCOME_MESSAGE_CAPS_KEY].asBoolean()
-        binding.tvHello.text = welcomeMessage
-        binding.tvHello.setTextColor(textColor)
+        binding.tvMainText.isAllCaps = remoteConfig[MAIN_TEXT_CAPS_RC_KEY].asBoolean()
+        binding.tvMainText.text = mainText
+        binding.tvMainText.setTextColor(textColor)
     }
 
     companion object {
         private const val TAG = "MainActivity"
 
         // Remote Config keys
-        private const val LOADING_PHRASE_CONFIG_KEY = "loading_phrase"
-        private const val WELCOME_MESSAGE_KEY = "welcome_message"
-        private const val WELCOME_MESSAGE_CAPS_KEY = "welcome_message_caps"
-        private const val WELCOME_TEXT_COLOR_KEY = "welcome_text_color"
+        private const val MAIN_TEXT_RC_KEY = "MAIN_TEXT_RC_KEY"
+        private const val MAIN_TEXT_CAPS_RC_KEY = "MAIN_TEXT_CAPS_RC_KEY"
+        private const val MAIN_TEXT_COLOR_RC_KEY = "MAIN_TEXT_COLOR_RC_KEY"
     }
 }
