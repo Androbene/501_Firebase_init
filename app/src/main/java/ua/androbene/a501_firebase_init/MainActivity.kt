@@ -1,5 +1,6 @@
 package ua.androbene.a501_firebase_init
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -79,6 +80,10 @@ class MainActivity : AppCompatActivity() {
             resetRC()
         }
 
+        binding.btnResult.setOnClickListener {
+            startActivity(Intent(this, ResultActivity::class.java))
+        }
+
         crashlytics.log("Activity created")
     }
 
@@ -88,7 +93,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetRC() {
-//        startActivity(Intent(this, ResultActivity::class.java))
 //        throw Exception("MY_EXEPTION_resetRC")
         remoteConfig.reset()
             .addOnCompleteListener(this) { task ->

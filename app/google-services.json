@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "140926426743",
-    "project_id": "first-init-501",
-    "storage_bucket": "first-init-501.appspot.com"
+    "project_number": "139772803082",
+    "project_id": "ttt-85534",
+    "storage_bucket": "ttt-85534.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:140926426743:android:4bc43bfc2e137000c1b072",
+        "mobilesdk_app_id": "1:139772803082:android:9b30b01b5f017fe13647f3",
         "android_client_info": {
           "package_name": "ua.androbene.a501_firebase_init"
         }
       },
       "oauth_client": [
         {
-          "client_id": "140926426743-1atho1dr240u1r2k0msif12n30jjitqs.apps.googleusercontent.com",
+          "client_id": "139772803082-hgrs8hfon34f7pm29hfsprqo7bsel45s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA4t-tq8KH_WFwMDrIUeP08z9_kL9efyFU"
+          "current_key": "AIzaSyAB23IIaotYvfnxJLKOnfq_G1OVWE5Ivnk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "140926426743-1atho1dr240u1r2k0msif12n30jjitqs.apps.googleusercontent.com",
+              "client_id": "139772803082-hgrs8hfon34f7pm29hfsprqo7bsel45s.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
