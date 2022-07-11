@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchRemoteData() {
-//        binding.tvMainText.text = remoteConfig[MAIN_TEXT_RC_KEY].asString()
+        binding.tvMainText.text = remoteConfig[MAIN_TEXT_RC_KEY].asString()
         remoteConfig.fetchAndActivate()
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                     ).show()
                 } else {
                     Log.d(TAG, "Fetch failed: ${task.exception?.message}")
-                    Toast.makeText(this, "Fetch failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Fetch failed ", Toast.LENGTH_SHORT).show()
                 }
                 displayRCData()
             }
